@@ -33,3 +33,8 @@ Módulo: `prestamo_unicah` — control de equipos, préstamos y devoluciones de 
 
 1. El dominio de `equipo_id` solo filtra los equipos que se ofrecen al elegir en el formulario, y solo en el momento de elegir. Un equipo seleccionado mientras estaba disponible puede cambiar de estado después (por ejemplo, enviarse a mantenimiento o prestarse en otro préstamo) mientras el préstamo sigue en borrador. Además, un dominio no es una regla obligatoria: no impide guardar datos por importación o código. Por eso el TODO 5 vuelve a comprobar la disponibilidad justo al pulsar Prestar.
 2. Un método con `@api.constrains` se ejecuta automáticamente cada vez que se crea o modifica un registro y cambia alguno de los campos indicados (al guardar), sin importar cómo se guarde. La validación de `action_prestar` solo se ejecuta cuando alguien pulsa el botón Prestar.
+
+### Paso 6. Contacto, kanban y búsqueda
+
+1. Al arrastrar una tarjeta a otra columna, el equipo cambia su estado al de esa columna (por ejemplo de Disponible a En mantenimiento). Pasa porque el kanban está agrupado por el campo `estado` (`default_group_by="estado"`): cada columna representa un valor de ese campo, y soltar la tarjeta en otra columna ejecuta una escritura que cambia el valor del campo.
+2. No, no se crea ninguna columna nueva en la tabla de contactos. `prestamo_ids` es un One2many, un campo virtual que no se guarda en `res_partner`: Odoo lo calcula buscando los préstamos cuyo `partner_id` apunta a ese contacto. La columna real (`partner_id`) está en la tabla de `prestamo.prestamo`.
