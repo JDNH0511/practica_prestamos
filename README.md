@@ -23,3 +23,8 @@ Módulo: `prestamo_unicah` — control de equipos, préstamos y devoluciones de 
 
 1. En `fields.One2many("prestamo.linea", "prestamo_id")`, el primer parámetro (`"prestamo.linea"`) es el modelo de las líneas que se mostrarán, y el segundo (`"prestamo_id"`) es el campo Many2one de `prestamo.linea` que apunta de vuelta al préstamo; así Odoo sabe qué líneas pertenecen a cada préstamo.
 2. Cuando se borra un préstamo, sus líneas se borran también automáticamente. Lo define `ondelete="cascade"` en el campo `prestamo_id` del modelo `prestamo.linea`.
+
+### Paso 4. Flujo de estados
+
+1. Los botones ocultos solo evitan que el usuario los vea en pantalla, pero el método se puede llamar de otras formas (otro código Python, una acción automática, una llamada externa). Por eso el método vuelve a validar el estado: garantiza la regla de negocio aunque la interfaz no la haga cumplir.
+2. `prestamo.linea_ids.equipo_id.write({...})` escribe el valor en todos los equipos de todas las líneas a la vez, porque en Odoo un campo relacional devuelve un conjunto de registros (recordset) y `write` se aplica a todo el conjunto en una sola operación. No hace falta un `for` por equipo.
